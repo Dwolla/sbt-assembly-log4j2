@@ -11,17 +11,14 @@ serialisable cache from multiple different ones.
 
 ## Setup
 
-For sbt 0.13.6+ add `sbt-assembly-log4j2` as a dependency in
-`project/assembly.sbt` alongside [`sbt-assembly`][sbt-assembly]:
+For sbt 1.x add `sbt-assembly-log4j2` as a dependency in
+`project/plugins.sbt` alongside [`sbt-assembly`][sbt-assembly]:
 
 ```scala
-resolvers += Resolver.url(
-  "idio",
-  url("http://dl.bintray.com/idio/sbt-plugins")
-)(Resolver.ivyStylePatterns)
+Resolver.bintrayIvyRepo("dwolla", "sbt-plugins"),
 
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "<version>")
-addSbtPlugin("org.idio" % "sbt-assembly-log4j2" % "0.1.0")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % {version})
+addSbtPlugin("com.dwolla" % "sbt-assembly-log4j2" % {version})
 ```
 
 [sbt-assembly]: https://github.com/sbt/sbt-assembly#setup
@@ -31,10 +28,8 @@ addSbtPlugin("org.idio" % "sbt-assembly-log4j2" % "0.1.0")
 In your merge strategy, add the following case:
 
 ```scala
-import sbtassembly.Log4j2MergeStrategy
-
 assemblyMergeStrategy in assembly := {
     //...
-    case PathList(ps @ _*) if ps.last == "Log4j2Plugins.dat" => Log4j2MergeStrategy.plugincache
+    case PathList(ps @ _*) if ps.last == "Log4j2Plugins.dat" => sbtassembly.Log4j2MergeStrategy.plugincache
     //...
 ```
